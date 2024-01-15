@@ -9,13 +9,20 @@ public class TCPClient {
   private Socket socket;
   private DataOutputStream os;
   private DataInputStream is;
+  JLabel statoConnessione;
 
   public void start() throws IOException { 
-    socket = new Socket("localhost", 7777); 
+    try{
+      socket = new Socket("localhost", 7777); 
+      statoConnessione.setText("connesso");
+      statoConnessione.setForeground(Color.green);
+    }catch(Exception e){
+      statoConnessione.setText("non connesso");
+      statoConnessione.setForeground(Color.red);
+    }
     os = new DataOutputStream(socket.getOutputStream()); 
     is = new DataInputStream(socket.getInputStream()); 
     BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); 
-
     while (true) { 
       String userInput = stdIn.readLine(); 
       if (userInput.equals("QUIT")) 
@@ -36,42 +43,65 @@ public class TCPClient {
   } 
 
   public void grafica() {
-    JFrame frame = new JFrame("Roulette");
+    ImageIcon sfond = new ImageIcon("Client/sfondo.gif");
+    JLabel sfondo = new JLabel(sfond);
+    sfondo.setSize(1400, 900);
+    sfondo.setLocation(200, 270);
+
+    JFrame frame = new JFrame("roulette");
     frame.setLayout(null);
     frame.getContentPane().setBackground(Color.BLACK);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    JLabel titolo = new JLabel("Buckshot Roulette");
+    JLabel titolo = new JLabel("roulette");
     titolo.setLocation(100, 0);
     titolo.setFont(new Font("Serif", Font.BOLD, 28));
     titolo.setSize(1000, 100);
     titolo.setForeground(Color.red);
 
-    JButton button = new JButton("Te");
+    JLabel testoVita = new JLabel("vita: " + this.vita);
+    testoVita.setLocation(100, 100);
+    testoVita.setFont(new Font("Serif", Font.BOLD, 28));
+    testoVita.setSize(1000, 100);
+    testoVita.setForeground(Color.white);
+
+    JLabel testoVitaAvversario = new JLabel("vita avversario: " + this.avversario);
+    testoVitaAvversario.setLocation(1500, 100);
+    testoVitaAvversario.setFont(new Font("Serif", Font.BOLD, 28));
+    testoVitaAvversario.setSize(1000, 100);
+    testoVitaAvversario.setForeground(Color.white);
+
+    statoConnessione = new JLabel("stato connessione");
+    statoConnessione.setLocation(600, 0);
+    statoConnessione.setFont(new Font("Serif", Font.BOLD, 28));
+    statoConnessione.setSize(1000, 100);
+    statoConnessione.setForeground(Color.red);
+
+    JButton button = new JButton("te");
     button.setSize(100, 100);
     button.setLocation(200, 500);
     button.addActionListener(e -> {
       vita--;
       try {
-        os.writeBytes("Se stesso");
+        os.writeBytes("se stesso");
       } catch (IOException e1) {
         e1.printStackTrace();
       }
     });
 
-    JButton button2 = new JButton("Avversario");
+    JButton button2 = new JButton("avversario");
     button2.setSize(100, 100);
     button2.setLocation(1500, 500);
     button2.addActionListener(e -> {
       avversario--;
       try {
-        os.writeBytes("Avversario");
+        os.writeBytes("avversario");
       } catch (IOException e1) {
         e1.printStackTrace();
       }
     });
 
-    JButton uscita = new JButton("Esci");
+    JButton uscita = new JButton("esci");
     uscita.setSize(100, 100);
     uscita.setLocation(1700, 900);
     uscita.addActionListener(e -> System.exit(0));
@@ -79,13 +109,17 @@ public class TCPClient {
     ImageIcon icon = new ImageIcon("Client/revolver.png");
     JLabel revolver = new JLabel(icon);
     revolver.setSize(500, 500);
-    revolver.setLocation(500, 500);
+    revolver.setLocation(710, 400);
 
     frame.add(titolo);
+    frame.add(testoVita);
+    frame.add(testoVitaAvversario);
+    frame.add(statoConnessione);
     frame.add(button);
     frame.add(button2);
     frame.add(uscita);
-    frame.add(revolver);
+    //frame.add(revolver);
+    frame.add(sfondo);
 
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(true);

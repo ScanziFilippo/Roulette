@@ -6,7 +6,6 @@ import java.io.*;
 public class TCPParallelServer {
   public void start() throws Exception {
     ServerSocket serverSocket = new ServerSocket(7777);
-
     //Ciclo infinito di ascolto dei Client
     while(true)
     {

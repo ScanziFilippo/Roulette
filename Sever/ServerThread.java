@@ -3,7 +3,6 @@ import java.io.*;
 
 class ServerThread extends Thread {
   private Socket socket;
-  
   public ServerThread (Socket socket) {
     this.socket = socket;
     System.out.println("  Stato    Tipo Richiesta  Porta Server  Porta Client  Indirizzo Cliernt\n");
