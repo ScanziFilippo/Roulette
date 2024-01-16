@@ -9,12 +9,16 @@ public class TCPParallelServer {
     //Ciclo infinito di ascolto dei Client
     while(true)
     {
-      System.out.println(" Attesa ");
+      System.out.println(" Attesa primo giocatore");
       Socket socket = serverSocket.accept();
       System.out.println("Ricezione una chiamata di apertura da:\n" + socket);
+      System.out.println("Attesa secondo giocatore");
+      Socket socket2 = serverSocket.accept();
+      System.out.println("Ricezione una chiamata di apertura da:\n" + socket2);
       //avvia il processo per ogni client 
-      ServerThread serverThread = new ServerThread(socket);
-      serverThread.start();
+      System.out.println("Partita avviata");
+      ServerThread partita = new ServerThread(socket, socket2);
+      partita.start();
     }
   }
 

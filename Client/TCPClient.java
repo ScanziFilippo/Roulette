@@ -10,25 +10,55 @@ public class TCPClient {
   private DataOutputStream os;
   private DataInputStream is;
   JLabel statoConnessione;
+  JLabel testoGiocatore;
+  JLabel testoTurno;
+
+  public TCPClient (){
+    
+  }
 
   public void start() throws IOException { 
     try{
       socket = new Socket("localhost", 7777); 
       statoConnessione.setText("connesso");
       statoConnessione.setForeground(Color.green);
+      System.out.println("Punto 1");
     }catch(Exception e){
       statoConnessione.setText("non connesso");
       statoConnessione.setForeground(Color.red);
     }
+    System.out.println("Punto 2");
     os = new DataOutputStream(socket.getOutputStream()); 
     is = new DataInputStream(socket.getInputStream()); 
-    BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); 
+    boolean turnoMio = false;
+    //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); 
+    System.out.println("Punto 3");
+    String proca = is.readLine();
+    while(true){
+      System.out.println("Punto 4");
+      if(proca.equals("Sei il primo")){
+        turnoMio = true;
+        testoGiocatore.setText("Giocatore 1");
+        break;  
+      }
+    }
+    /*
+    while(is.readLine() == null || (!is.readLine().equals("Sei il primo") && !is.readLine().equals("Sei il secondo"))){
+      System.out.println("Ancora niente");
+    }*/
+    System.out.println("VA?");
+    if(is.readLine().equals("Sei il primo")){
+      turnoMio = true;
+      testoGiocatore.setText("Giocatore 1");
+    }else{
+      testoGiocatore.setText("Giocatore 2");
+    }
     while (true) { 
-      String userInput = stdIn.readLine(); 
-      if (userInput.equals("QUIT")) 
+      //String userInput = stdIn.readLine(); 
+      if (is.readLine().equals("QUIT")) 
         break; 
-      os.writeBytes(userInput + '\n');  
-      System.out.println("Hai digitato: " + is.readLine()); 
+      /*os.writeBytes(userInput + '\n');  
+      System.out.println("Hai digitato: " + is.readLine()); */
     } 
 
     os.close(); 
@@ -70,6 +100,12 @@ public class TCPClient {
     testoVitaAvversario.setFont(new Font("Serif", Font.BOLD, 28));
     testoVitaAvversario.setSize(1000, 100);
     testoVitaAvversario.setForeground(Color.white);
+
+    testoGiocatore = new JLabel("dai");
+    testoGiocatore.setLocation(1400, 0);
+    testoGiocatore.setFont(new Font("Serif", Font.BOLD, 28));
+    testoGiocatore.setSize(1000, 100);
+    testoGiocatore.setForeground(Color.white);
 
     statoConnessione = new JLabel("stato connessione");
     statoConnessione.setLocation(600, 0);
@@ -114,12 +150,13 @@ public class TCPClient {
     frame.add(titolo);
     frame.add(testoVita);
     frame.add(testoVitaAvversario);
+    frame.add(testoGiocatore);
     frame.add(statoConnessione);
     frame.add(button);
     frame.add(button2);
     frame.add(uscita);
     //frame.add(revolver);
-    frame.add(sfondo);
+    //frame.add(sfondo);
 
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(true);
