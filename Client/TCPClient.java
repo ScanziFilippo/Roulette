@@ -22,36 +22,26 @@ public class TCPClient {
       socket = new Socket("localhost", 7777); 
       statoConnessione.setText("connesso");
       statoConnessione.setForeground(Color.green);
-      System.out.println("Punto 1");
     }catch(Exception e){
       statoConnessione.setText("non connesso");
       statoConnessione.setForeground(Color.red);
     }
-    System.out.println("Punto 2");
     os = new DataOutputStream(socket.getOutputStream()); 
     is = new DataInputStream(socket.getInputStream()); 
     boolean turnoMio = false;
     //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in)); 
-    System.out.println("Punto 3");
-    String proca = is.readLine();
     while(true){
-      System.out.println("Punto 4");
+      String proca = is.readLine();
       if(proca.equals("Sei il primo")){
         turnoMio = true;
         testoGiocatore.setText("Giocatore 1");
+        os.writeBytes("OK\n");
         break;  
+      }else if(proca.equals("Sei il secondo")){
+        testoGiocatore.setText("Giocatore 2");
+        os.writeBytes("OK\n");
+        break;
       }
-    }
-    /*
-    while(is.readLine() == null || (!is.readLine().equals("Sei il primo") && !is.readLine().equals("Sei il secondo"))){
-      System.out.println("Ancora niente");
-    }*/
-    System.out.println("VA?");
-    if(is.readLine().equals("Sei il primo")){
-      turnoMio = true;
-      testoGiocatore.setText("Giocatore 1");
-    }else{
-      testoGiocatore.setText("Giocatore 2");
     }
     while (true) { 
       //String userInput = stdIn.readLine(); 
@@ -156,7 +146,7 @@ public class TCPClient {
     frame.add(button2);
     frame.add(uscita);
     //frame.add(revolver);
-    //frame.add(sfondo);
+    frame.add(sfondo);
 
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(true);

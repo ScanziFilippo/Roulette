@@ -17,11 +17,16 @@ class ServerThread extends Thread {
       DataInputStream is2 = new DataInputStream(socket2.getInputStream());
       DataOutputStream os2 = new DataOutputStream(socket2.getOutputStream());
 
-      os.writeBytes("Sei il primo");
-      System.out.println(socket.getPort() + " è il primo");
-      os2.writeBytes("Sei il secondo");
-      System.out.println(socket2.getPort() + " è il secondo");
-
+      while (true) {
+        os.writeBytes("Sei il primo\n");
+        System.out.println(socket.getPort() + " è il primo");
+        os2.writeBytes("Sei il secondo\n");
+        System.out.println(socket2.getPort() + " è il secondo");
+        if(is.readLine().equals("OK") && is2.readLine().equals("OK")){
+          System.out.println("OK");
+          break;
+        }
+      }
       while(true) {
         String userInput = is.readLine();
         if (userInput == null || userInput.equals("QUIT"))
