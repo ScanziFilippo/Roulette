@@ -12,6 +12,9 @@ public class TCPClient {
   JLabel statoConnessione;
   JLabel testoGiocatore;
   JLabel testoTurno;
+  JButton button;
+  JButton button2;
+  JButton uscita;
 
   public TCPClient (){
     
@@ -43,12 +46,23 @@ public class TCPClient {
         break;
       }
     }
+    System.out.println("Partita avviata");
     while (true) { 
+      String proca = is.readLine();
       //String userInput = stdIn.readLine(); 
-      if (is.readLine().equals("QUIT")) 
+      if (proca.equals("QUIT")) 
         break; 
       /*os.writeBytes(userInput + '\n');  
       System.out.println("Hai digitato: " + is.readLine()); */
+      if(proca.equals("Turno tuo")){
+        testoTurno.setText("Turno tuo");
+        os.writeBytes("Turno OK\n");
+        abilitaPulsanti();
+      }else if(proca.equals("Turno non tuo")){
+        testoTurno.setText("Turno non tuo");
+        os.writeBytes("Turno OK\n");
+        disabilitaPulsanti();
+      }
     } 
 
     os.close(); 
@@ -103,31 +117,37 @@ public class TCPClient {
     statoConnessione.setSize(1000, 100);
     statoConnessione.setForeground(Color.red);
 
-    JButton button = new JButton("te");
+    testoTurno = new JLabel("turno");
+    testoTurno.setLocation(600, 100);
+    testoTurno.setFont(new Font("Serif", Font.BOLD, 28));
+    testoTurno.setSize(1000, 100);
+    testoTurno.setForeground(Color.white);
+
+    button = new JButton("te");
     button.setSize(100, 100);
     button.setLocation(200, 500);
     button.addActionListener(e -> {
       vita--;
       try {
-        os.writeBytes("se stesso");
+        os.writeBytes("Spara se stesso");
       } catch (IOException e1) {
         e1.printStackTrace();
       }
     });
 
-    JButton button2 = new JButton("avversario");
+    button2 = new JButton("avversario");
     button2.setSize(100, 100);
     button2.setLocation(1500, 500);
     button2.addActionListener(e -> {
       avversario--;
       try {
-        os.writeBytes("avversario");
+        os.writeBytes("Spara avversario");
       } catch (IOException e1) {
         e1.printStackTrace();
       }
     });
 
-    JButton uscita = new JButton("esci");
+    uscita = new JButton("esci");
     uscita.setSize(100, 100);
     uscita.setLocation(1700, 900);
     uscita.addActionListener(e -> System.exit(0));
@@ -141,15 +161,25 @@ public class TCPClient {
     frame.add(testoVita);
     frame.add(testoVitaAvversario);
     frame.add(testoGiocatore);
+    frame.add(testoTurno);
     frame.add(statoConnessione);
     frame.add(button);
     frame.add(button2);
     frame.add(uscita);
     //frame.add(revolver);
-    frame.add(sfondo);
+    //frame.add(sfondo);
 
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(true);
     frame.setVisible(true);
+    disabilitaPulsanti();
+  }
+  public void disabilitaPulsanti(){
+    button.setEnabled(false);
+    button2.setEnabled(false);
+  }
+  public void abilitaPulsanti(){
+    button.setEnabled(true);
+    button2.setEnabled(true);
   }
 }

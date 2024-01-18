@@ -23,20 +23,32 @@ class ServerThread extends Thread {
         os2.writeBytes("Sei il secondo\n");
         System.out.println(socket2.getPort() + " è il secondo");
         if(is.readLine().equals("OK") && is2.readLine().equals("OK")){
-          System.out.println("OK");
+          System.out.println("Ruoli assegnati OK");
           break;
         }
       }
+      os.writeBytes("Turno tuo\n");
+      os2.writeBytes("Turno non tuo\n");          
+      //Turno primo giocatore
       while(true) {
         String userInput = is.readLine();
+        String userInput2 = is2.readLine();
         if (userInput == null || userInput.equals("QUIT"))
           break;
         /*os.writeBytes(userInput + '\n');
         System.out.println("Il Client "+ socket.getInetAddress() +" "
         + socket.getPort() +" "
         + socket.getLocalPort() +" ha scritto: " + userInput);*/
-        
-        //Turno primo giocatore
+        if(!userInput.equals("Turno OK") && !userInput2.equals("Turno OK")){
+          os.writeBytes("Turno tuo\n");
+          os2.writeBytes("Turno non tuo\n");          
+        }
+        System.out.println("Turno G1 OK");
+        userInput = is.readLine();
+        if(userInput.equals("Spara se stesso")){
+          os2.writeBytes("Sparato se stesso\n");
+          //togli vita
+        }
       }
       os.close();
       is.close();
