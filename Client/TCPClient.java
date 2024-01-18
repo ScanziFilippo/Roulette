@@ -12,6 +12,8 @@ public class TCPClient {
   JLabel statoConnessione;
   JLabel testoGiocatore;
   JLabel testoTurno;
+  JLabel testoVita;
+  JLabel testoVitaAvversario;
   JButton button;
   JButton button2;
   JButton uscita;
@@ -55,13 +57,36 @@ public class TCPClient {
       /*os.writeBytes(userInput + '\n');  
       System.out.println("Hai digitato: " + is.readLine()); */
       if(proca.equals("Turno tuo")){
+        turnoMio = true;
         testoTurno.setText("Turno tuo");
         os.writeBytes("Turno OK\n");
         abilitaPulsanti();
+        System.out.println("Turno mio");
       }else if(proca.equals("Turno non tuo")){
+        turnoMio = false;
         testoTurno.setText("Turno non tuo");
         os.writeBytes("Turno OK\n");
         disabilitaPulsanti();
+        System.out.println("Turno non mio");
+      }
+      if(!turnoMio){
+        proca = is.readLine();
+        if(proca.equals("Sparato se stesso")){
+          avversario--;
+          testoVitaAvversario.setText("vita avversario: " + avversario);
+        }else if(proca.equals("Sparato avversario")){
+          vita--;
+          testoVita.setText("vita: " + vita);
+        }
+        System.out.println("Sparo OK");
+        os.writeBytes("Sparo OK\n");
+      }else{
+        proca = is.readLine();
+        System.out.println(proca);
+        if(proca.equals("Sparo OK")){
+          os.writeBytes("Turno OK\n");
+          System.out.println("Sparato");
+        }
       }
     } 
 
@@ -93,13 +118,13 @@ public class TCPClient {
     titolo.setSize(1000, 100);
     titolo.setForeground(Color.red);
 
-    JLabel testoVita = new JLabel("vita: " + this.vita);
+    testoVita = new JLabel("vita: " + this.vita);
     testoVita.setLocation(100, 100);
     testoVita.setFont(new Font("Serif", Font.BOLD, 28));
     testoVita.setSize(1000, 100);
     testoVita.setForeground(Color.white);
 
-    JLabel testoVitaAvversario = new JLabel("vita avversario: " + this.avversario);
+    testoVitaAvversario = new JLabel("vita avversario: " + this.avversario);
     testoVitaAvversario.setLocation(1500, 100);
     testoVitaAvversario.setFont(new Font("Serif", Font.BOLD, 28));
     testoVitaAvversario.setSize(1000, 100);
@@ -127,9 +152,11 @@ public class TCPClient {
     button.setSize(100, 100);
     button.setLocation(200, 500);
     button.addActionListener(e -> {
+      disabilitaPulsanti();
       vita--;
+      testoVita.setText("vita: " + vita);
       try {
-        os.writeBytes("Spara se stesso");
+        os.writeBytes("Spara se stesso\n");
       } catch (IOException e1) {
         e1.printStackTrace();
       }
@@ -139,9 +166,11 @@ public class TCPClient {
     button2.setSize(100, 100);
     button2.setLocation(1500, 500);
     button2.addActionListener(e -> {
+      disabilitaPulsanti();
       avversario--;
+      testoVitaAvversario.setText("vita avversario: " + avversario);
       try {
-        os.writeBytes("Spara avversario");
+        os.writeBytes("Spara avversario\n");
       } catch (IOException e1) {
         e1.printStackTrace();
       }
