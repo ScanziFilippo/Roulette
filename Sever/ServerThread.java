@@ -64,6 +64,9 @@ class ServerThread extends Thread {
         }
         System.out.println("Turni riassegnati OK");
         userInput2 = is2.readLine();
+        if(userInput2.equals("Turno OK")){
+          userInput2 = is2.readLine();
+        }
         if(userInput2.equals("Spara se stesso")){
           os.writeBytes("Sparato se stesso\n");
         }else if (userInput2.equals("Spara avversario")){
@@ -71,6 +74,8 @@ class ServerThread extends Thread {
         }
         System.out.println("G2 ha sparato");
         userInput = is.readLine();
+        userInput = is.readLine();
+        System.out.println("Ricevo: " + userInput);
         if(userInput.equals("Sparo OK")){
           os2.writeBytes("Sparo OK\n");
           System.out.println("Sparo OK");

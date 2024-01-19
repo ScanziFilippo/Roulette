@@ -4,8 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 
 public class TCPClient { 
-  public int vita = 10;
-  public int avversario = 10;
+  public int vita = 5;
+  public int avversario = 5;
   private Socket socket;
   private DataOutputStream os;
   private DataInputStream is;
@@ -74,14 +74,18 @@ public class TCPClient {
         if(proca.equals("Sparato se stesso")){
           avversario--;
           testoVitaAvversario.setText("vita avversario: " + avversario);
+          System.out.println("Ha sparato se stesso");
         }else if(proca.equals("Sparato avversario")){
           vita--;
           testoVita.setText("vita: " + vita);
+          System.out.println("Ha sparato l'avversario");
         }
-        System.out.println("Sparo OK");
+        //System.out.println("Sparo OK");
         os.writeBytes("Sparo OK\n");
       }else{
+        System.out.println("Ci sono");
         proca = is.readLine();
+        System.out.print("Dice: ");
         System.out.println(proca);
         if(proca.equals("Sparo OK")){
           os.writeBytes("Turno OK\n");
