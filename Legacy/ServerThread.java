@@ -1,4 +1,5 @@
 import java.net.*;
+import java.util.*;
 import java.io.*;
 
 class ServerThread extends Thread {
@@ -9,7 +10,25 @@ class ServerThread extends Thread {
     this.socket2 = socket2;
     System.out.println("Assegnazione ruoli");
   }
-
+  int[][] casi = {
+    {0,0,0,1,1,1},
+    {1,0,0,1,1,0},
+    {1,1,0,0,0,0},
+    {1,1,1,0,1,0},
+    {1,1,1,1,0,0},
+    {1,1,1,1,1,0}
+  };
+  int caso = (int)(Math.random()*6);
+  int sparati = 0;
+  int[] caricatore = casi[caso];
+  public void rimescola(){
+    List<Integer> caricatoreLista = Arrays.asList(Integer.parseInt(caricatore.toString()));
+    Collections.shuffle(caricatoreLista);
+    for (int i = 0; i < caricatore.length; i++) {
+      caricatore[i] = caricatoreLista.get(i);
+    }
+    System.out.println("Caricatore rimescolato: " + caricatore);
+  }
   public void run() {
     try {
       DataInputStream is = new DataInputStream(socket.getInputStream());
@@ -46,9 +65,23 @@ class ServerThread extends Thread {
         System.out.println("Turni assegnati OK");
         userInput = is.readLine();
         if(userInput.equals("Spara se stesso")){
-          os2.writeBytes("Sparato se stesso\n");
+          if(caricatore[sparati] == 1){
+            os.writeBytes("Sparato se stesso rosso\n");
+            os2.writeBytes("Sparato se stesso rosso\n");
+          }else{
+            os.writeBytes("Sparato se stesso bianco\n");
+            os2.writeBytes("Sparato se stesso bianco\n");
+          }
+          sparati++;
         }else if (userInput.equals("Spara avversario")){
-          os2.writeBytes("Sparato avversario\n");
+          if(caricatore[sparati] == 1){
+            os.writeBytes("Sparato avversario rosso\n");
+            os2.writeBytes("Sparato avversario rosso\n");
+          }else{
+            os.writeBytes("Sparato avversario bianco\n");
+            os2.writeBytes("Sparato avversario bianco\n");
+          }
+          sparati++;
         }
         System.out.println("G1 ha sparato");
         userInput2 = is2.readLine();
@@ -68,9 +101,23 @@ class ServerThread extends Thread {
           userInput2 = is2.readLine();
         }
         if(userInput2.equals("Spara se stesso")){
-          os.writeBytes("Sparato se stesso\n");
+          if(caricatore[sparati] == 1){
+            os2.writeBytes("Sparato se stesso rosso\n");
+            os.writeBytes("Sparato se stesso rosso\n");
+          }else{
+            os2.writeBytes("Sparato se stesso bianco\n");
+            os.writeBytes("Sparato se stesso bianco\n");
+          }
+          sparati++;
         }else if (userInput2.equals("Spara avversario")){
-          os.writeBytes("Sparato avversario\n");
+          if(caricatore[sparati] == 1){
+            os2.writeBytes("Sparato avversario rosso\n");
+            os.writeBytes("Sparato avversario rosso\n");
+          }else{
+            os2.writeBytes("Sparato avversario bianco\n");
+            os.writeBytes("Sparato avversario bianco\n");
+          }
+          sparati++;
         }
         System.out.println("G2 ha sparato");
         userInput = is.readLine();
