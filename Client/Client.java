@@ -204,10 +204,11 @@ public class Client {
     testoTurno.setForeground(Color.white);
 
     comunicazione = new JLabel("");
-    comunicazione.setLocation(700, 1000);
+    comunicazione.setLocation(420, 900);
     comunicazione.setFont(new Font("Serif", Font.BOLD, 32));
     comunicazione.setSize(1000, 100);
     comunicazione.setForeground(Color.white);
+    comunicazione.setHorizontalAlignment(JLabel.CENTER);
 
     button = new JButton("te");
     button.setSize(100, 100);
@@ -252,7 +253,7 @@ public class Client {
     revolver.setLocation(710, 400);
 
     frame.add(comunicazione);
-    frame.add(risultato);
+    //frame.add(risultato);
     frame.add(titolo);
     frame.add(testoVita);
     frame.add(testoVitaAvversario);
