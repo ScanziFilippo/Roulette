@@ -9,6 +9,10 @@ public class Client {
   private Socket socket;
   private DataOutputStream os;
   private DataInputStream is;
+  JFrame frame;
+  ImageIcon rosaRossa;
+  ImageIcon rosaBianca;
+  JLabel sfondo;
   JLabel statoConnessione;
   JLabel testoGiocatore;
   JLabel testoTurno;
@@ -19,6 +23,7 @@ public class Client {
   JButton button;
   JButton button2;
   JButton uscita;
+  JLabel[] rose = new JLabel[6];
 
   public Client (){
     
@@ -63,13 +68,24 @@ public class Client {
         }
         else if (azione.substring(0,5).equals("Colpi")) {
           disabilitaPulsanti();
-          comunicazione.setText(azione);
+          //comunicazione.setText(azione);
+          for(int i=0;i<6;i++){
+            if(azione.substring(8+i*3, 9+i*3).equals("1")){
+              rose[i].setIcon(rosaRossa);
+            }
+            else{
+              rose[i].setIcon(rosaBianca);
+            }
+            rose[i].setVisible(true);
+          }
           try {
             Thread.sleep(5000);
+            for(int i=0;i<6;i++){
+              rose[i].setVisible(false);
+            }
             comunicazione.setText("I colpi entrano in un ordine sconosciuto...");
             Thread.sleep(5000);
           } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
           }
           System.out.println("Colpi: " + azione);
@@ -151,12 +167,19 @@ public class Client {
   } 
 
   public void grafica() {
+    /*JPanel panel = new JPanel();
+    panel.setSize(1400, 900);
+    panel.setLocation(0, 0);*/
+
     ImageIcon sfond = new ImageIcon("Client/sfondo.gif");
-    JLabel sfondo = new JLabel(sfond);
+    sfondo = new JLabel(sfond);
     sfondo.setSize(1400, 900);
     sfondo.setLocation(200, 270);
 
-    JFrame frame = new JFrame("roulette");
+    rosaRossa = new ImageIcon("Client/rosa_rossar.png");
+    rosaBianca = new ImageIcon("Client/rosa_biancar.png");
+
+    frame = new JFrame("roulette");
     frame.setLayout(null);
     frame.getContentPane().setBackground(Color.BLACK);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -252,6 +275,13 @@ public class Client {
     revolver.setSize(500, 500);
     revolver.setLocation(710, 400);
 
+    for(int i=0;i<6;i++){
+      rose[i] = new JLabel(rosaBianca);
+      rose[i].setSize(128, 128);
+      rose[i].setLocation(600+i*100, 925);
+      frame.add(rose[i]);
+      rose[i].setVisible(false);
+    }
     frame.add(comunicazione);
     //frame.add(risultato);
     frame.add(titolo);

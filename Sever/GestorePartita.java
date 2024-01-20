@@ -75,10 +75,22 @@ class GestorePartita extends Thread {
         String in2 = is2.readLine();
         if(in1.equals("esci")){
           os2.writeBytes("esci\n");
+          is.close();
+          os.close();
+          is2.close();
+          os2.close();
+          socket.close();
+          socket2.close();
           break;
         }
         else if(in2.equals("esci")){
           os.writeBytes("esci\n");
+          is.close();
+          os.close();
+          is2.close();
+          os2.close();
+          socket.close();
+          socket2.close();
           break;
         }
         //System.out.println("Punto 2");
