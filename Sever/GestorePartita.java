@@ -16,7 +16,7 @@ class GestorePartita extends Thread {
   };
   int caso = (int)(Math.random()*6);
   int sparati = 0;
-  int[] caricatore = casi[caso];
+  int[] caricatore;
   boolean turnoG1 = true;
   DataInputStream is;
   DataOutputStream os;
@@ -37,14 +37,26 @@ class GestorePartita extends Thread {
     }
     System.out.println("Caricatore rimescolato: " + Arrays.toString(caricatore));
   }
+  public void ricarica(){
+    caso = (int)(Math.random()*6);
+    caricatore = casi[caso];
+    sparati = 0;
+    try {
+      os.writeBytes("Colpi: " + Arrays.toString(caricatore) + "\n");
+      os2.writeBytes("Colpi: " + Arrays.toString(caricatore) + "\n");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   public void run() {
     try {
-      rimescola();
       is = new DataInputStream(socket.getInputStream());
       os = new DataOutputStream(socket.getOutputStream());
       is2 = new DataInputStream(socket2.getInputStream());
       os2 = new DataOutputStream(socket2.getOutputStream());
+      ricarica();
+      rimescola();
       while (true) {
         os.writeBytes("Sei il primo\n");
         System.out.println(socket.getPort() + " è il primo");
@@ -58,7 +70,7 @@ class GestorePartita extends Thread {
       os.writeBytes("Turno tuo\n");
       os2.writeBytes("Turno non tuo\n");
       while(true) {
-        System.out.println("Punto 1");
+        //System.out.println("Punto 1");
         String in1 = is.readLine();
         String in2 = is2.readLine();
         if(in1.equals("esci")){
@@ -69,21 +81,21 @@ class GestorePartita extends Thread {
           os.writeBytes("esci\n");
           break;
         }
-        System.out.println("Punto 2");
+        //System.out.println("Punto 2");
         System.out.println("in1: " + in1);
         System.out.println("in2: " + in2);
         while ((turnoG1 && in1.length() < 4) || (!turnoG1 && in2.length() < 4) || ((turnoG1 && !in1.substring(0, 5).equals("Spara")) && in2.substring(0, 5) != "Spara" && in1 != "esci" && in2 != "esci")) {
           if(turnoG1){
             in1 = is.readLine();
-            System.out.println("win1: " + in1);
+            //System.out.println("win1: " + in1);
           }
           else{
             in2 = is2.readLine();
-            System.out.println("win2: " + in2);
+            //System.out.println("win2: " + in2);
           }
-          System.out.println(in2.length() < 4);
+          //System.out.println(in2.length() < 4);
         }
-        System.out.println("Punto 3");
+        //System.out.println("Punto 3");
         if (in1.equals("esci")){
           os2.writeBytes("esci\n");
           break; 
@@ -155,6 +167,9 @@ class GestorePartita extends Thread {
             System.out.println("Colpo falso");
           }
           turnoG1();
+        }
+        if(sparati == 6){
+          ricarica();
         }
       }
       os.close();

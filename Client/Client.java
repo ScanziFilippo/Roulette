@@ -14,6 +14,8 @@ public class Client {
   JLabel testoTurno;
   JLabel testoVita;
   JLabel testoVitaAvversario;
+  JLabel risultato;
+  JLabel comunicazione;
   JButton button;
   JButton button2;
   JButton uscita;
@@ -59,9 +61,28 @@ public class Client {
           disabilitaPulsanti();
           os.writeBytes("OK\n");
         }
+        else if (azione.substring(0,5).equals("Colpi")) {
+          disabilitaPulsanti();
+          comunicazione.setText(azione);
+          try {
+            Thread.sleep(5000);
+            comunicazione.setText("I colpi entrano in un ordine sconosciuto...");
+            Thread.sleep(5000);
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          System.out.println("Colpi: " + azione);
+          if(turnoMio){
+            abilitaPulsanti();
+          }
+          break;
+        }
         azione = is.readLine();
       }
+      comunicazione.setText("");
       if (azione.equals("esci")){
+        risultato.setText("Hai vinto");
         break; 
       }
       if(turnoMio){
@@ -91,6 +112,11 @@ public class Client {
         } 
         else if (azione.substring(5, 25).equals("to avversario bianco")) {
         } 
+      }
+      if (vita == 0) {
+        risultato.setText("Hai perso");
+        os.writeBytes("esci\n");
+        break;
       }
     }
 
@@ -141,6 +167,12 @@ public class Client {
     titolo.setSize(1000, 100);
     titolo.setForeground(Color.red);
 
+    risultato = new JLabel("");
+    risultato.setLocation(500, 500);
+    risultato.setFont(new Font("Serif", Font.BOLD, 28));
+    risultato.setSize(1000, 100);
+    risultato.setForeground(Color.white);
+
     testoVita = new JLabel("vita: " + this.vita);
     testoVita.setLocation(100, 100);
     testoVita.setFont(new Font("Serif", Font.BOLD, 28));
@@ -153,7 +185,7 @@ public class Client {
     testoVitaAvversario.setSize(1000, 100);
     testoVitaAvversario.setForeground(Color.white);
 
-    testoGiocatore = new JLabel("dai");
+    testoGiocatore = new JLabel("Giocatore ?");
     testoGiocatore.setLocation(1400, 0);
     testoGiocatore.setFont(new Font("Serif", Font.BOLD, 28));
     testoGiocatore.setSize(1000, 100);
@@ -165,11 +197,17 @@ public class Client {
     statoConnessione.setSize(1000, 100);
     statoConnessione.setForeground(Color.red);
 
-    testoTurno = new JLabel("turno");
+    testoTurno = new JLabel("");
     testoTurno.setLocation(600, 100);
     testoTurno.setFont(new Font("Serif", Font.BOLD, 28));
     testoTurno.setSize(1000, 100);
     testoTurno.setForeground(Color.white);
+
+    comunicazione = new JLabel("");
+    comunicazione.setLocation(700, 1000);
+    comunicazione.setFont(new Font("Serif", Font.BOLD, 32));
+    comunicazione.setSize(1000, 100);
+    comunicazione.setForeground(Color.white);
 
     button = new JButton("te");
     button.setSize(100, 100);
@@ -213,6 +251,8 @@ public class Client {
     revolver.setSize(500, 500);
     revolver.setLocation(710, 400);
 
+    frame.add(comunicazione);
+    frame.add(risultato);
     frame.add(titolo);
     frame.add(testoVita);
     frame.add(testoVitaAvversario);
@@ -223,7 +263,7 @@ public class Client {
     frame.add(button2);
     frame.add(uscita);
     //frame.add(revolver);
-    //frame.add(sfondo);
+    frame.add(sfondo);
 
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(true);
