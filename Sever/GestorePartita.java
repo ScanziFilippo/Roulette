@@ -15,7 +15,7 @@ class GestorePartita extends Thread {
     {1,1,1,1,1,0}
   };
   int caso = (int)(Math.random()*6);
-  int sparati = 0;
+  int sparati = 6;
   int[] caricatore;
   boolean turnoG1 = true;
   DataInputStream is;
@@ -55,8 +55,6 @@ class GestorePartita extends Thread {
       os = new DataOutputStream(socket.getOutputStream());
       is2 = new DataInputStream(socket2.getInputStream());
       os2 = new DataOutputStream(socket2.getOutputStream());
-      ricarica();
-      rimescola();
       while (true) {
         os.writeBytes("Sei il primo\n");
         System.out.println(socket.getPort() + " è il primo");
@@ -70,6 +68,10 @@ class GestorePartita extends Thread {
       os.writeBytes("Turno tuo\n");
       os2.writeBytes("Turno non tuo\n");
       while(true) {
+        if(sparati == 6){
+          ricarica();
+          rimescola();
+        }
         //System.out.println("Punto 1");
         String in1 = is.readLine();
         String in2 = is2.readLine();
@@ -179,9 +181,6 @@ class GestorePartita extends Thread {
             System.out.println("Colpo falso");
           }
           turnoG1();
-        }
-        if(sparati == 6){
-          ricarica();
         }
       }
       os.close();

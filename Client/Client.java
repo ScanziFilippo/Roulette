@@ -12,6 +12,8 @@ public class Client {
   JFrame frame;
   ImageIcon rosaRossa;
   ImageIcon rosaBianca;
+  ImageIcon pistolaTavolo;
+  JLabel pistola;
   JLabel sfondo;
   JLabel statoConnessione;
   JLabel testoGiocatore;
@@ -69,6 +71,7 @@ public class Client {
         else if (azione.substring(0,5).equals("Colpi")) {
           disabilitaPulsanti();
           //comunicazione.setText(azione);
+          pistola.setVisible(false);
           for(int i=0;i<6;i++){
             if(azione.substring(8+i*3, 9+i*3).equals("1")){
               rose[i].setIcon(rosaRossa);
@@ -83,8 +86,13 @@ public class Client {
             for(int i=0;i<6;i++){
               rose[i].setVisible(false);
             }
+            comunicazione.setOpaque(true);
+            comunicazione.setBorder(BorderFactory.createLineBorder(Color.red, 5));
             comunicazione.setText("I colpi entrano in un ordine sconosciuto...");
             Thread.sleep(5000);
+            comunicazione.setBorder(null);
+            comunicazione.setOpaque(false);
+            pistola.setVisible(true);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -129,6 +137,7 @@ public class Client {
         else if (azione.substring(5, 25).equals("to avversario bianco")) {
         } 
       }
+      pistola.setIcon(pistolaTavolo);
       if (vita == 0) {
         risultato.setText("Hai perso");
         os.writeBytes("esci\n");
@@ -167,9 +176,6 @@ public class Client {
   } 
 
   public void grafica() {
-    /*JPanel panel = new JPanel();
-    panel.setSize(1400, 900);
-    panel.setLocation(0, 0);*/
 
     ImageIcon sfond = new ImageIcon("Client/sfondo.gif");
     sfondo = new JLabel(sfond);
@@ -232,31 +238,44 @@ public class Client {
     comunicazione.setSize(1000, 100);
     comunicazione.setForeground(Color.white);
     comunicazione.setHorizontalAlignment(JLabel.CENTER);
+    comunicazione.setBackground(Color.black);
 
     button = new JButton("te");
     button.setSize(100, 100);
     button.setLocation(200, 500);
-    button.addActionListener(e -> {
-      disabilitaPulsanti();
-      try {
-        os.writeBytes("Spara se stesso\n");
-        System.out.println("Ho sparato me stesso");
-      } catch (IOException e1) {
-        e1.printStackTrace();
-      }
+    button.addActionListener(e -> {(
+      new Thread() {
+        public void run() {
+          disabilitaPulsanti();
+          try {
+            pistola.setIcon(null);
+            Thread.sleep(2000);
+            os.writeBytes("Spara se stesso\n");
+            System.out.println("Ho sparato me stesso");
+          } catch (Exception e1) {
+            e1.printStackTrace();
+          }
+        }
+      }).start();
     });
 
     button2 = new JButton("avversario");
     button2.setSize(100, 100);
     button2.setLocation(1500, 500);
-    button2.addActionListener(e -> {
-      disabilitaPulsanti();
-      try {
-        os.writeBytes("Spara avversario\n");
-        System.out.println("Ho sparato l'avversario");
-      } catch (IOException e1) {
-        e1.printStackTrace();
-      }
+    button2.addActionListener(e -> {(
+      new Thread() {
+      public void run() {
+        disabilitaPulsanti();
+        try {
+          pistola.setIcon(null);
+          Thread.sleep(2000);
+          os.writeBytes("Spara avversario\n");
+          System.out.println("Ho sparato l'avversario");
+        } catch (Exception e1) {
+          e1.printStackTrace();
+        }
+        }
+     }).start();
     });
 
     uscita = new JButton("esci");
@@ -265,7 +284,7 @@ public class Client {
     uscita.addActionListener(e -> {
       try {
         os.writeBytes("esci");
-      } catch (IOException e1) {
+      } catch (Exception e1) {
         e1.printStackTrace();
       }
       System.exit(0);});
@@ -275,6 +294,11 @@ public class Client {
     revolver.setSize(500, 500);
     revolver.setLocation(710, 400);
 
+    pistolaTavolo = new ImageIcon("Client/pistolar.png");
+    pistola = new JLabel(pistolaTavolo);
+    pistola.setSize(400, 400);
+    pistola.setLocation(700, 800);
+
     for(int i=0;i<6;i++){
       rose[i] = new JLabel(rosaBianca);
       rose[i].setSize(128, 128);
@@ -283,6 +307,7 @@ public class Client {
       rose[i].setVisible(false);
     }
     frame.add(comunicazione);
+    frame.add(pistola);
     //frame.add(risultato);
     frame.add(titolo);
     frame.add(testoVita);
