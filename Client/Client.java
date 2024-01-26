@@ -6,9 +6,22 @@ import javax.swing.*;
 public class Client { 
   public int vita = 5;
   public int avversario = 5;
+  String[] oggetti = {
+    "lente",
+    "quadrifoglio",
+    "cuore",
+    "teschio",
+    "manette"
+  };
+  int intervallo = /*5000*/ 1000;
+  List inventario = new List();
+
   private Socket socket;
   private DataOutputStream os;
   private DataInputStream is;
+
+  boolean turnoMio = false;
+
   JFrame frame;
   ImageIcon rosaRossa;
   ImageIcon rosaBianca;
@@ -22,6 +35,7 @@ public class Client {
   JLabel testoVitaAvversario;
   JLabel risultato;
   JLabel comunicazione;
+  JLabel[] oggettiInventario = new JLabel[6];
   JButton button;
   JButton button2;
   JButton uscita;
@@ -42,7 +56,6 @@ public class Client {
     }
     os = new DataOutputStream(socket.getOutputStream()); 
     is = new DataInputStream(socket.getInputStream()); 
-    boolean turnoMio = false;
 
     while (true) {
       String azione = is.readLine();
@@ -82,17 +95,20 @@ public class Client {
             rose[i].setVisible(true);
           }
           try {
-            Thread.sleep(5000);
+            Thread.sleep(intervallo);
             for(int i=0;i<6;i++){
               rose[i].setVisible(false);
             }
             comunicazione.setOpaque(true);
             comunicazione.setBorder(BorderFactory.createLineBorder(Color.red, 5));
             comunicazione.setText("I colpi entrano in un ordine sconosciuto...");
-            Thread.sleep(5000);
+            Thread.sleep(intervallo);
             comunicazione.setBorder(null);
             comunicazione.setOpaque(false);
             pistola.setVisible(true);
+            nuovoOggetto();
+            nuovoOggetto();
+            nuovoOggetto();
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -169,6 +185,28 @@ public class Client {
       testoVita.setForeground(Color.green);
     }
   }
+
+  private void nuovoOggetto(){
+    if(inventario.getItemCount() != 6){
+      inventario.add(oggetti[(int)(Math.random()*oggetti.length)]);
+      oggettiInventario[inventario.getItemCount()-1].setIcon(new ImageIcon("Client/" + inventario.getItem(inventario.getItemCount()-1) + ".png"));
+      oggettiInventario[inventario.getItemCount()-1].setVisible(true);
+      System.out.println("Inventario: " + inventario.getItemCount() + " " + inventario.getItem(inventario.getItemCount()-1));
+    }
+  }
+
+  private void aggiornaOggetti(){
+    for(int i=0;i<6;i++){
+      if(i < inventario.getItemCount()){
+        oggettiInventario[i].setIcon(new ImageIcon("Client/" + inventario.getItem(i) + ".png"));
+        oggettiInventario[i].setVisible(true);
+      }
+      else{
+        oggettiInventario[i].setVisible(false);
+      }
+    }
+  }
+
   public static void main (String[] args) throws Exception { 
     Client tcpClient = new Client(); 
     tcpClient.grafica();
@@ -189,6 +227,14 @@ public class Client {
     frame.setLayout(null);
     frame.getContentPane().setBackground(Color.BLACK);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    for(int i=0;i<6;i++){
+      oggettiInventario[i] = new JLabel();
+      oggettiInventario[i].setSize(96, 96);
+      oggettiInventario[i].setLocation(50, 300+i*120);
+      oggettiInventario[i].setVisible(true);
+      frame.add(oggettiInventario[i]);
+    }
 
     JLabel titolo = new JLabel("roulette");
     titolo.setLocation(100, 0);
