@@ -1,17 +1,19 @@
 import java.net.*; 
 import java.io.*; 
 import java.awt.*;
+import java.awt.event.*;
+
 import javax.swing.*;
 
 public class Client { 
   public int vita = 5;
   public int avversario = 5;
   String[] oggetti = {
-    "lente",
+    "lente"/*,
     "quadrifoglio",
     "cuore",
     "teschio",
-    "manette"
+    "manette"*/
   };
   int intervallo = /*5000*/ 1000;
   List inventario = new List();
@@ -41,8 +43,11 @@ public class Client {
   JButton uscita;
   JLabel[] rose = new JLabel[6];
 
-  public Client (){
-    
+  public Client () throws IOException{
+    grafica();
+    start();
+    inventario.add("lente");
+    aggiornaOggetti();
   }
 
   public void start() throws IOException { 
@@ -117,6 +122,22 @@ public class Client {
             abilitaPulsanti();
           }
           break;
+        }
+        else if(azione.substring(0,5).equals("Lente")){
+          if(azione.substring(6, 7).equals("1")){
+            rose[0].setIcon(rosaRossa);
+          }
+          else{
+            rose[0].setIcon(rosaBianca);
+          }
+          rose[0].setVisible(true);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          rose[0].setVisible(false);
         }
         azione = is.readLine();
       }
@@ -207,10 +228,12 @@ public class Client {
     }
   }
 
+
+
   public static void main (String[] args) throws Exception { 
     Client tcpClient = new Client(); 
-    tcpClient.grafica();
-    tcpClient.start(); 
+    //tcpClient.grafica();
+    //tcpClient.start(); 
   } 
 
   public void grafica() {
@@ -227,6 +250,25 @@ public class Client {
     frame.setLayout(null);
     frame.getContentPane().setBackground(Color.BLACK);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        if(turnoMio){
+          if(e.getX()>50 && e.getX()<150 && e.getY()>300 && e.getY()<1020){
+            int posizione = (e.getY()-300)/120;
+            if(posizione < inventario.getItemCount()){
+              try {
+                os.writeBytes("Usa " + inventario.getItem(posizione) + "\n");
+                System.out.println("Usato " + inventario.getItem(posizione));
+                inventario.remove(posizione);
+                aggiornaOggetti();
+              } catch (IOException e1) {
+                e1.printStackTrace();
+              }
+            }
+          }
+        }
+      }
+    });
 
     for(int i=0;i<6;i++){
       oggettiInventario[i] = new JLabel();

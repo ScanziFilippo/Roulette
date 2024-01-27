@@ -98,14 +98,22 @@ class GestorePartita extends Thread {
         //System.out.println("Punto 2");
         System.out.println("in1: " + in1);
         System.out.println("in2: " + in2);
-        while ((turnoG1 && in1.length() < 4) || (!turnoG1 && in2.length() < 4) || ((turnoG1 && !in1.substring(0, 5).equals("Spara")) && in2.substring(0, 5) != "Spara" && in1 != "esci" && in2 != "esci")) {
+        while ((turnoG1 && in1.length() < 5) || (!turnoG1 && in2.length() < 5)  || ((turnoG1 && !in1.substring(0, 5).equals("Spara")) && (in1 != "esci" && in2 != "esci")) || ((!turnoG1 && !in2.substring(0, 5).equals("Spara")) && (in1 != "esci" && in2 != "esci"))) {
           if(turnoG1){
+            if(in1.equals("Usa lente")){
+              os.writeBytes("Lente " + caricatore[sparati] + "\n");
+              System.out.println("wout1: " + "Lente " + caricatore[sparati]);
+            }
             in1 = is.readLine();
-            //System.out.println("win1: " + in1);
+            System.out.println("win1: " + in1);
           }
           else{
+            if(in2.equals("Usa lente")){
+              os2.writeBytes("Lente " + caricatore[sparati] + "\n");
+              System.out.println("wout1: " + "Lente " + caricatore[sparati]);
+            }
             in2 = is2.readLine();
-            //System.out.println("win2: " + in2);
+            System.out.println("win2: " + in2);
           }
           //System.out.println(in2.length() < 4);
         }
