@@ -9,10 +9,10 @@ public class Client {
   public int vita = 5;
   public int avversario = 5;
   String[] oggetti = {
-    //"lente",
-    //"quadrifoglio",
-    //"cuore",
-    //"teschio",
+    "lente",
+    "quadrifoglio",
+    "cuore",
+    "teschio",
     "manette"
   };
   int intervallo = /*5000*/ 1000;
@@ -81,7 +81,7 @@ public class Client {
           testoTurno.setText("Turno tuo");
           abilitaPulsanti();
           os.writeBytes("OK\n");
-        } 
+        }
         else if (azione.equals("Turno non tuo")) {
           turnoMio = false;
           testoTurno.setText("Turno non tuo");
@@ -136,7 +136,6 @@ public class Client {
           try {
             Thread.sleep(intervallo);
           } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
           }
           rose[0].setVisible(false);
@@ -173,12 +172,22 @@ public class Client {
         if (azione.substring(5, 23).equals("to se stesso rosso")){
           vita--;
           aggiornaVita();
+          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
+            vita--;
+            aggiornaVita();
+          }
         }
         else if(azione.substring(5, 24).equals("to se stesso bianco")){
         }
         else if(azione.substring(5, 24).equals("to avversario rosso")){
           avversario--;
           aggiornaVitaAvversario();
+          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
+            avversario--;
+            aggiornaVitaAvversario();
+          }
         }
         else if(azione.substring(5, 25).equals("to avversario bianco")){
         }
@@ -187,12 +196,22 @@ public class Client {
         if (azione.substring(5, 23).equals("to se stesso rosso")) {
           avversario--;
           aggiornaVitaAvversario();
+          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
+            avversario--;
+            aggiornaVitaAvversario();
+          }
         } 
         else if (azione.substring(5, 24).equals("to se stesso bianco")) {
         } 
         else if (azione.substring(5, 24).equals("to avversario rosso")) {
           vita--;
           aggiornaVita();
+          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
+            vita--;
+            aggiornaVita();
+          }
         } 
         else if (azione.substring(5, 25).equals("to avversario bianco")) {
         } 
@@ -250,8 +269,6 @@ public class Client {
       }
     }
   }
-
-
 
   public static void main (String[] args) throws Exception { 
     Client tcpClient = new Client(); 

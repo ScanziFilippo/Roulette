@@ -19,6 +19,7 @@ class GestorePartita extends Thread {
   int[] caricatore;
   boolean turnoG1 = true;
   boolean manette = false;
+  boolean teschio = false;
 
   DataInputStream is;
   DataOutputStream os;
@@ -117,6 +118,9 @@ class GestorePartita extends Thread {
             else if(in1.equals("Usa manette")){
               manette = true;
             }
+            else if(in1.equals("Usa teschio")){
+              teschio = true;
+            }
             if(sparati == 6){
               ricarica();
               rimescola();
@@ -140,6 +144,9 @@ class GestorePartita extends Thread {
             else if(in2.equals("Usa manette")){
               manette = true;
             }
+            else if(in2.equals("Usa teschio")){
+              teschio = true;
+            }
             if(sparati == 6){
               ricarica();
               rimescola();
@@ -160,8 +167,14 @@ class GestorePartita extends Thread {
         }
         else if(in1.equals("Spara se stesso")){
           if(caricatore[sparati] == 1){
-            os.writeBytes("Sparato se stesso rosso\n");
-            os2.writeBytes("Sparato se stesso rosso\n");
+            if(teschio){
+              os.writeBytes("Sparato se stesso rosso doppio\n");
+              os2.writeBytes("Sparato se stesso rosso doppio\n");
+              teschio = false;
+            }else{
+              os.writeBytes("Sparato se stesso rosso\n");
+              os2.writeBytes("Sparato se stesso rosso\n");
+            }
             sparati++;
             if (manette) {
               manette = false;
@@ -182,8 +195,15 @@ class GestorePartita extends Thread {
         }
         else if(in1.equals("Spara avversario")){
           if(caricatore[sparati] == 1){
-            os.writeBytes("Sparato avversario rosso\n");
-            os2.writeBytes("Sparato avversario rosso\n");
+            if (teschio) {
+              os.writeBytes("Sparato avversario rosso doppio\n");
+              os2.writeBytes("Sparato avversario rosso doppio\n");
+              teschio = false;
+            }
+            else{
+              os.writeBytes("Sparato avversario rosso\n");
+              os2.writeBytes("Sparato avversario rosso\n");
+            }
             sparati++;
             System.out.println("Colpo sparato");
           }
@@ -202,8 +222,14 @@ class GestorePartita extends Thread {
         }
         else if(in2.equals("Spara se stesso")){
           if(caricatore[sparati] == 1){
-            os.writeBytes("Sparato se stesso rosso\n");
-            os2.writeBytes("Sparato se stesso rosso\n");
+            if(teschio){
+              os.writeBytes("Sparato se stesso rosso doppio\n");
+              os2.writeBytes("Sparato se stesso rosso doppio\n");
+              teschio = false;
+            }else{
+              os.writeBytes("Sparato se stesso rosso\n");
+              os2.writeBytes("Sparato se stesso rosso\n");
+            }
             sparati++;
             if (manette) {
               manette = false;
@@ -223,8 +249,14 @@ class GestorePartita extends Thread {
         }
         else if(in2.equals("Spara avversario")){
           if(caricatore[sparati] == 1){
-            os.writeBytes("Sparato avversario rosso\n");
-            os2.writeBytes("Sparato avversario rosso\n");
+            if(teschio){
+              os.writeBytes("Sparato avversario rosso doppio\n");
+              os2.writeBytes("Sparato avversario rosso doppio\n");
+              teschio = false;
+            }else{
+              os.writeBytes("Sparato avversario rosso\n");
+              os2.writeBytes("Sparato avversario rosso\n");
+            }
             sparati++;
             System.out.println("Colpo sparato");
           }
@@ -241,6 +273,7 @@ class GestorePartita extends Thread {
             turnoG1();
           }
         }
+        teschio = false;
       }
       os.close();
       is.close();
