@@ -18,6 +18,8 @@ class GestorePartita extends Thread {
   int sparati = 6;
   int[] caricatore;
   boolean turnoG1 = true;
+  boolean manette = false;
+
   DataInputStream is;
   DataOutputStream os;
   DataInputStream is2;
@@ -107,6 +109,17 @@ class GestorePartita extends Thread {
             else if(in1.equals("Usa quadrifoglio")){
               os.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Quadrifoglio " + caricatore[sparati]);
+              sparati++;
+            }
+            else if(in1.equals("Usa cuore")){
+              os2.writeBytes("Usato cuore\n");
+            }
+            else if(in1.equals("Usa manette")){
+              manette = true;
+            }
+            if(sparati == 6){
+              ricarica();
+              rimescola();
             }
             in1 = is.readLine();
             System.out.println("win1: " + in1);
@@ -116,9 +129,20 @@ class GestorePartita extends Thread {
               os2.writeBytes("Lente " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Lente " + caricatore[sparati]);
             }
-            else if(in1.equals("Usa quadrifoglio")){
+            else if(in2.equals("Usa quadrifoglio")){
               os2.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
               System.out.println("wout2: " + "Quadrifoglio " + caricatore[sparati]);
+              sparati++;
+            }
+            else if(in2.equals("Usa cuore")){
+              os.writeBytes("Usato cuore\n");
+            }
+            else if(in2.equals("Usa manette")){
+              manette = true;
+            }
+            if(sparati == 6){
+              ricarica();
+              rimescola();
             }
             in2 = is2.readLine();
             System.out.println("win2: " + in2);
@@ -139,7 +163,11 @@ class GestorePartita extends Thread {
             os.writeBytes("Sparato se stesso rosso\n");
             os2.writeBytes("Sparato se stesso rosso\n");
             sparati++;
-            turnoG2();
+            if (manette) {
+              manette = false;
+            }else{
+              turnoG2();
+            }
             System.out.println("Colpo sparato");
           }
           else{
@@ -165,14 +193,24 @@ class GestorePartita extends Thread {
             sparati++;
             System.out.println("Colpo falso");
           }
-          turnoG2();
+          if (manette) {
+            manette = false;
+            turnoG1();
+          }else{
+            turnoG2();
+          }        
         }
         else if(in2.equals("Spara se stesso")){
           if(caricatore[sparati] == 1){
             os.writeBytes("Sparato se stesso rosso\n");
             os2.writeBytes("Sparato se stesso rosso\n");
             sparati++;
-            turnoG1();
+            if (manette) {
+              manette = false;
+              turnoG2();
+            }else{
+              turnoG1();
+            }            
             System.out.println("Colpo sparato");
           }
           else{
@@ -196,7 +234,12 @@ class GestorePartita extends Thread {
             sparati++;
             System.out.println("Colpo falso");
           }
-          turnoG1();
+          if (manette) {
+            manette = false;
+            turnoG2();
+          }else{
+            turnoG1();
+          }
         }
       }
       os.close();

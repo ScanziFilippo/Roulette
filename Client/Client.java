@@ -9,11 +9,11 @@ public class Client {
   public int vita = 5;
   public int avversario = 5;
   String[] oggetti = {
-    "lente",
-    "quadrifoglio"/*,
-    "cuore",
-    "teschio",
-    "manette"*/
+    //"lente",
+    //"quadrifoglio",
+    //"cuore",
+    //"teschio",
+    "manette"
   };
   int intervallo = /*5000*/ 1000;
   List inventario = new List();
@@ -23,6 +23,7 @@ public class Client {
   private DataInputStream is;
 
   boolean turnoMio = false;
+  boolean manette = false;
 
   JFrame frame;
   ImageIcon rosaRossa;
@@ -76,6 +77,7 @@ public class Client {
         } 
         else if (azione.equals("Turno tuo")) {
           turnoMio = true;
+          manette = false;
           testoTurno.setText("Turno tuo");
           abilitaPulsanti();
           os.writeBytes("OK\n");
@@ -139,6 +141,10 @@ public class Client {
           }
           rose[0].setVisible(false);
         }
+        else if(azione.equals("Usato cuore")){
+          avversario++;
+          aggiornaVitaAvversario();
+        }
         else if(azione.substring(0,12).equals("Quadrifoglio")){
           if(azione.substring(13, 14).equals("1")){
             rose[0].setIcon(rosaRossa);
@@ -155,6 +161,7 @@ public class Client {
           }
           rose[0].setVisible(false);
         }
+        
         azione = is.readLine();
       }
       comunicazione.setText("");
@@ -273,8 +280,19 @@ public class Client {
             int posizione = (e.getY()-300)/120;
             if(posizione < inventario.getItemCount()){
               try {
+                if(inventario.getItem(posizione).equals("manette")){
+                  if(!manette){
+                    manette = true;
+                  }else{
+                    return;
+                  }
+                }
                 os.writeBytes("Usa " + inventario.getItem(posizione) + "\n");
                 System.out.println("Usato " + inventario.getItem(posizione));
+                if(inventario.getItem(posizione).equals("cuore")){
+                  vita++;
+                  aggiornaVita();
+                }
                 inventario.remove(posizione);
                 aggiornaOggetti();
               } catch (IOException e1) {
