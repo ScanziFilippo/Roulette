@@ -9,8 +9,8 @@ public class Client {
   public int vita = 5;
   public int avversario = 5;
   String[] oggetti = {
-    "lente"/*,
-    "quadrifoglio",
+    "lente",
+    "quadrifoglio"/*,
     "cuore",
     "teschio",
     "manette"*/
@@ -125,6 +125,22 @@ public class Client {
         }
         else if(azione.substring(0,5).equals("Lente")){
           if(azione.substring(6, 7).equals("1")){
+            rose[0].setIcon(rosaRossa);
+          }
+          else{
+            rose[0].setIcon(rosaBianca);
+          }
+          rose[0].setVisible(true);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          rose[0].setVisible(false);
+        }
+        else if(azione.substring(0,12).equals("Quadrifoglio")){
+          if(azione.substring(13, 14).equals("1")){
             rose[0].setIcon(rosaRossa);
           }
           else{

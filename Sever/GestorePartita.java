@@ -104,6 +104,10 @@ class GestorePartita extends Thread {
               os.writeBytes("Lente " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Lente " + caricatore[sparati]);
             }
+            else if(in1.equals("Usa quadrifoglio")){
+              os.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
+              System.out.println("wout1: " + "Quadrifoglio " + caricatore[sparati]);
+            }
             in1 = is.readLine();
             System.out.println("win1: " + in1);
           }
@@ -111,6 +115,10 @@ class GestorePartita extends Thread {
             if(in2.equals("Usa lente")){
               os2.writeBytes("Lente " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Lente " + caricatore[sparati]);
+            }
+            else if(in1.equals("Usa quadrifoglio")){
+              os2.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
+              System.out.println("wout2: " + "Quadrifoglio " + caricatore[sparati]);
             }
             in2 = is2.readLine();
             System.out.println("win2: " + in2);
