@@ -178,6 +178,7 @@ class GestorePartita extends Thread {
             sparati++;
             if (manette) {
               manette = false;
+              turnoG1();
             }else{
               turnoG2();
             }

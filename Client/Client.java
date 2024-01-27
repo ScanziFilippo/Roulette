@@ -15,7 +15,7 @@ public class Client {
     "teschio",
     "manette"
   };
-  int intervallo = /*5000*/ 1000;
+  int intervallo = /*5000*/ 3000;
   List inventario = new List();
 
   private Socket socket;
