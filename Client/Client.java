@@ -29,6 +29,10 @@ public class Client {
   ImageIcon rosaRossa;
   ImageIcon rosaBianca;
   ImageIcon pistolaTavolo;
+  ImageIcon pistolaMe;
+  ImageIcon pistolaMeAvversario;
+  ImageIcon pistolaAvversario;
+  ImageIcon pistolaAvversarioTe;
   JLabel oggetto;
   JLabel pistola;
   JLabel sfondo;
@@ -188,6 +192,22 @@ public class Client {
         break; 
       }
       if(turnoMio){
+        if(azione.substring(5, 10).equals("to se")){
+          //pistola.setIcon(pistolaMe);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        else if(azione.substring(5, 10).equals("to av")){
+          //pistola.setIcon(pistolaMeAvversario);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
         if (azione.substring(5, 23).equals("to se stesso rosso")){
           vita--;
           aggiornaVita();
@@ -212,6 +232,26 @@ public class Client {
         }
       }
       else {
+        if(azione.substring(5, 10).equals("to se")){
+          pistola.setIcon(pistolaAvversario);
+          pistola.setVisible(true);
+          pistola.setLocation(650, 550);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        else if(azione.substring(5, 10).equals("to av")){
+          pistola.setIcon(pistolaAvversarioTe);
+          pistola.setVisible(true);
+          pistola.setLocation(750, 550);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
         if (azione.substring(5, 23).equals("to se stesso rosso")) {
           avversario--;
           aggiornaVitaAvversario();
@@ -235,6 +275,7 @@ public class Client {
         else if (azione.substring(5, 25).equals("to avversario bianco")) {
         } 
       }
+      pistola.setLocation(700, 800);
       pistola.setIcon(pistolaTavolo);
       if (vita == 0) {
         risultato.setText("Hai perso");
@@ -412,7 +453,7 @@ public class Client {
           disabilitaPulsanti();
           try {
             pistola.setIcon(null);
-            Thread.sleep(2000);
+            //Thread.sleep(2000);
             os.writeBytes("Spara se stesso\n");
             System.out.println("Ho sparato me stesso");
           } catch (Exception e1) {
@@ -431,7 +472,7 @@ public class Client {
         disabilitaPulsanti();
         try {
           pistola.setIcon(null);
-          Thread.sleep(2000);
+          //Thread.sleep(2000);
           os.writeBytes("Spara avversario\n");
           System.out.println("Ho sparato l'avversario");
         } catch (Exception e1) {
@@ -457,6 +498,10 @@ public class Client {
     revolver.setSize(500, 500);
     revolver.setLocation(710, 400);
 
+    pistolaMe = new ImageIcon("Client/pistolaMe.png");
+    pistolaMeAvversario = new ImageIcon("Client/pistolaMeAvversario.png");
+    pistolaAvversario = new ImageIcon("Client/pistolaAvversario.png");
+    pistolaAvversarioTe = new ImageIcon("Client/pistolaAvversarioTe.png");
     pistolaTavolo = new ImageIcon("Client/pistolar.png");
     pistola = new JLabel(pistolaTavolo);
     pistola.setSize(400, 400);
