@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 public class Client { 
   public int vita = 5;
@@ -26,6 +27,7 @@ public class Client {
   boolean manette = false;
 
   JFrame frame;
+  JLabel morte;
   ImageIcon rosaRossa;
   ImageIcon rosaBianca;
   ImageIcon pistolaTavolo;
@@ -190,7 +192,8 @@ public class Client {
             // TODO Auto-generated catch block
             e.printStackTrace();
           }
-          rose[0].setVisible(false);
+          scomparsa(rose[0]);
+          //rose[0].setVisible(false);
         }
         
         azione = is.readLine();
@@ -227,23 +230,27 @@ public class Client {
         }
         if (azione.substring(5, 23).equals("to se stesso rosso")){
           vita--;
-          aggiornaVita();
           System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             vita--;
-            aggiornaVita();
           }
+          aggiornaVita();
         }
         else if(azione.substring(5, 24).equals("to se stesso bianco")){
         }
         else if(azione.substring(5, 24).equals("to avversario rosso")){
           avversario--;
-          aggiornaVitaAvversario();
           System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             avversario--;
-            aggiornaVitaAvversario();
           }
+          aggiornaVitaAvversario();
+          try {
+            Thread.sleep(intervallo/2);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          sfondo.setIcon(new ImageIcon("Client/sfondo.gif"));
         }
         else if(azione.substring(5, 25).equals("to avversario bianco")){
         }
@@ -263,7 +270,7 @@ public class Client {
         else if(azione.substring(5, 10).equals("to av")){
           pistola.setIcon(pistolaAvversarioTe);
           pistola.setVisible(true);
-          pistola.setLocation(750, 550);
+          pistola.setLocation(620, 550);
           tremolio();
           try {
             Thread.sleep(intervallo);
@@ -273,23 +280,27 @@ public class Client {
         }
         if (azione.substring(5, 23).equals("to se stesso rosso")) {
           avversario--;
-          aggiornaVitaAvversario();
           System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             avversario--;
-            aggiornaVitaAvversario();
           }
+          aggiornaVitaAvversario();
+          try {
+            Thread.sleep(intervallo/2);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          sfondo.setIcon(new ImageIcon("Client/sfondo.gif"));
         } 
         else if (azione.substring(5, 24).equals("to se stesso bianco")) {
         } 
         else if (azione.substring(5, 24).equals("to avversario rosso")) {
           vita--;
-          aggiornaVita();
           System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             vita--;
-            aggiornaVita();
           }
+          aggiornaVita();
         } 
         else if (azione.substring(5, 25).equals("to avversario bianco")) {
         } 
@@ -307,6 +318,26 @@ public class Client {
     is.close(); 
     socket.close(); 
   } 
+
+  private void scomparsa(JLabel jLabel) {
+    // Fade out ImageIcon
+    new Thread() {
+      public void run() {
+        int alpha = 255;
+        while (alpha > 0) {
+          alpha -= 5;
+          jLabel.setBackground(new Color(0, 0, 0, alpha));
+          jLabel.repaint();
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        jLabel.setVisible(false);
+      }
+    }.start();
+  }
 
   private void tremolio() {
     new Thread() {
@@ -338,6 +369,32 @@ public class Client {
       testoVita.setForeground(Color.red);
       testoVitaAvversario.setText("Ha vinto");
       testoVitaAvversario.setForeground(Color.green);
+      morte.setVisible(true);
+      morte.setText("Hai perso");
+      morte.setForeground(Color.white);
+      morte.setFont(new Font("Arial", Font.BOLD, 100));
+      //centra
+      morte.setHorizontalAlignment(JLabel.CENTER);
+    } else {
+      morte.setVisible(true);
+      /*new Thread() {
+        public void run() {*/
+          morte.setVisible(true);
+          float alpha = 1;
+          while(alpha > 0.02){
+            alpha -= 0.01;
+            try {
+              Thread.sleep(10);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            //System.out.println(alpha + " " + morte.isVisible());
+            morte.setBackground(new Color(1.0f,0.0f,0.0f,alpha));
+          }
+          morte.setVisible(false);
+          morte.setBackground(new Color(1,0,0,1));/*
+        }
+      }.start();*/
     }
   }
 
@@ -348,6 +405,9 @@ public class Client {
       testoVitaAvversario.setForeground(Color.red);
       testoVita.setText("Hai vinto");
       testoVita.setForeground(Color.green);
+    }else{
+      pistola.setLocation(pistola.getX(), pistola.getY()-1);
+      sfondo.setIcon(new ImageIcon("Client/sfondo2.png"));
     }
   }
 
@@ -428,13 +488,6 @@ public class Client {
       }
     });
 
-    for(int i=0;i<6;i++){
-      oggettiInventario[i] = new JLabel();
-      oggettiInventario[i].setSize(96, 96);
-      oggettiInventario[i].setLocation(50, 300+i*120);
-      oggettiInventario[i].setVisible(true);
-      frame.add(oggettiInventario[i]);
-    }
 
     JLabel titolo = new JLabel("roulette");
     titolo.setLocation(100, 0);
@@ -487,7 +540,7 @@ public class Client {
     comunicazione.setBackground(Color.black);
 
     button = new JButton("te");
-    button.setSize(100, 100);
+    button.setSize(200, 100);
     button.setLocation(200, 500);
     button.addActionListener(e -> {(
       new Thread() {
@@ -504,9 +557,11 @@ public class Client {
         }
       }).start();
     });
+    button.setFocusPainted(false);
+    button.setFont(new Font("Arial", Font.BOLD, 20));
 
     button2 = new JButton("avversario");
-    button2.setSize(100, 100);
+    button2.setSize(200, 100);
     button2.setLocation(1500, 500);
     button2.addActionListener(e -> {(
       new Thread() {
@@ -523,6 +578,11 @@ public class Client {
         }
      }).start();
     });
+    button2.setFocusPainted(false);
+    button2.setFont(new Font("Arial", Font.BOLD, 20));
+    /*button2.setForeground(Color.red);
+    button2.setBorder(BorderFactory.createLineBorder(Color.red, 5));
+    button2.setBackground(Color.black);*/
 
     uscita = new JButton("esci");
     uscita.setSize(100, 100);
@@ -534,6 +594,14 @@ public class Client {
         e1.printStackTrace();
       }
       System.exit(0);});
+    //uscita.setBorder(BorderFactory.createLineBorder(Color.red, 5));
+    uscita.setFocusPainted(false);
+    uscita.setFont(new Font("Arial", Font.BOLD, 20));
+    /*uscita.setForeground(Color.red);
+    uscita.setBorder(BorderFactory.createLineBorder(Color.red, 5));
+    uscita.setBackground(Color.black);*/
+    //uscita.setContentAreaFilled(false);
+    uscita.setUI(new BasicButtonUI());
 
     ImageIcon icon = new ImageIcon("Client/revolver.png");
     JLabel revolver = new JLabel(icon);
@@ -549,6 +617,22 @@ public class Client {
     pistola.setSize(400, 400);
     pistola.setLocation(700, 800);
 
+    morte = new JLabel();
+    morte.setSize(1920, 1080);
+    morte.setLocation(0, 0);
+    morte.setBackground(Color.red);
+    morte.setVisible(false);
+    morte.setOpaque(true);
+    frame.add(morte);
+
+    for(int i=0;i<6;i++){
+      oggettiInventario[i] = new JLabel();
+      oggettiInventario[i].setSize(96, 96);
+      oggettiInventario[i].setLocation(50, 300+i*120);
+      oggettiInventario[i].setVisible(true);
+      frame.add(oggettiInventario[i]);
+    }
+
     for(int i=0;i<6;i++){
       rose[i] = new JLabel(rosaBianca);
       rose[i].setSize(128, 128);
@@ -556,6 +640,7 @@ public class Client {
       frame.add(rose[i]);
       rose[i].setVisible(false);
     }
+
     frame.add(comunicazione);
     frame.add(oggetto);
     frame.add(pistola);
