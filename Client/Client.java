@@ -9,11 +9,11 @@ public class Client {
   public int vita = 5;
   public int avversario = 5;
   String[] oggetti = {
-    "lente",
+    "lente"/*,
     "quadrifoglio",
     "cuore",
     "teschio",
-    "manette"
+    "manette"*/
   };
   int intervallo = /*5000*/ 3000;
   List inventario = new List();
@@ -29,6 +29,7 @@ public class Client {
   ImageIcon rosaRossa;
   ImageIcon rosaBianca;
   ImageIcon pistolaTavolo;
+  JLabel oggetto;
   JLabel pistola;
   JLabel sfondo;
   JLabel statoConnessione;
@@ -126,19 +127,37 @@ public class Client {
           break;
         }
         else if(azione.substring(0,5).equals("Lente")){
-          if(azione.substring(6, 7).equals("1")){
-            rose[0].setIcon(rosaRossa);
+          if(turnoMio){
+            if(azione.substring(6, 7).equals("1")){
+              rose[0].setIcon(rosaRossa);
+            }
+            else{
+              rose[0].setIcon(rosaBianca);
+            }
+            rose[0].setVisible(true);
+            oggetto.setIcon(new ImageIcon("Client/lente.png"));
+            oggetto.setLocation(500,950);
+            oggetto.setVisible(true);
+            try {
+              Thread.sleep(intervallo);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            rose[0].setVisible(false);
+            oggetto.setVisible(false);
           }
           else{
-            rose[0].setIcon(rosaBianca);
+            System.out.println("Lente avversario");
+            oggetto.setIcon(new ImageIcon("Client/lente.png"));
+            oggetto.setLocation(1100,700);
+            oggetto.setVisible(true);
+            try {
+              Thread.sleep(intervallo);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            oggetto.setVisible(false);
           }
-          rose[0].setVisible(true);
-          try {
-            Thread.sleep(intervallo);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-          rose[0].setVisible(false);
         }
         else if(azione.equals("Usato cuore")){
           avversario++;
@@ -282,6 +301,11 @@ public class Client {
     sfondo = new JLabel(sfond);
     sfondo.setSize(1400, 900);
     sfondo.setLocation(200, 270);
+
+    oggetto = new JLabel();
+    oggetto.setSize(96, 96);
+    oggetto.setLocation(50, 300);
+    oggetto.setVisible(false);
 
     rosaRossa = new ImageIcon("Client/rosa_rossar.png");
     rosaBianca = new ImageIcon("Client/rosa_biancar.png");
@@ -446,6 +470,7 @@ public class Client {
       rose[i].setVisible(false);
     }
     frame.add(comunicazione);
+    frame.add(oggetto);
     frame.add(pistola);
     //frame.add(risultato);
     frame.add(titolo);

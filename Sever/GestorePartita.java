@@ -105,6 +105,7 @@ class GestorePartita extends Thread {
           if(turnoG1){
             if(in1.equals("Usa lente")){
               os.writeBytes("Lente " + caricatore[sparati] + "\n");
+              os2.writeBytes("Lente " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Lente " + caricatore[sparati]);
             }
             else if(in1.equals("Usa quadrifoglio")){
@@ -131,6 +132,7 @@ class GestorePartita extends Thread {
           else{
             if(in2.equals("Usa lente")){
               os2.writeBytes("Lente " + caricatore[sparati] + "\n");
+              os.writeBytes("Lente " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Lente " + caricatore[sparati]);
             }
             else if(in2.equals("Usa quadrifoglio")){
