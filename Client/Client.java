@@ -9,11 +9,11 @@ public class Client {
   public int vita = 5;
   public int avversario = 5;
   String[] oggetti = {
-    "lente"/*,
+    "lente",
     "quadrifoglio",
     "cuore",
     "teschio",
-    "manette"*/
+    "manette"
   };
   int intervallo = /*5000*/ 3000;
   List inventario = new List();
@@ -114,7 +114,7 @@ public class Client {
             comunicazione.setOpaque(true);
             comunicazione.setBorder(BorderFactory.createLineBorder(Color.red, 5));
             comunicazione.setText("I colpi entrano in un ordine sconosciuto...");
-            Thread.sleep(intervallo);
+            Thread.sleep(intervallo/2);
             comunicazione.setBorder(null);
             comunicazione.setOpaque(false);
             pistola.setVisible(true);
@@ -164,6 +164,15 @@ public class Client {
           }
         }
         else if(azione.equals("Usato cuore")){
+          oggetto.setIcon(new ImageIcon("Client/cuore.png"));
+          oggetto.setLocation(1100,700);
+          oggetto.setVisible(true);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          oggetto.setVisible(false);
           avversario++;
           aggiornaVitaAvversario();
         }
@@ -193,7 +202,10 @@ public class Client {
       }
       if(turnoMio){
         if(azione.substring(5, 10).equals("to se")){
-          //pistola.setIcon(pistolaMe);
+          pistola.setIcon(pistolaMe);
+          pistola.setVisible(true);
+          pistola.setLocation(700, 800);
+          tremolio();
           try {
             Thread.sleep(intervallo);
           } catch (InterruptedException e) {
@@ -201,12 +213,17 @@ public class Client {
           }
         }
         else if(azione.substring(5, 10).equals("to av")){
-          //pistola.setIcon(pistolaMeAvversario);
+          pistola.setIcon(pistolaMeAvversario);
+          pistola.setVisible(true);
+          pistola.setLocation(1200, 600);
+          tremolio();
           try {
             Thread.sleep(intervallo);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
+          pistola.setVisible(false);
+          pistola.setVisible(true);
         }
         if (azione.substring(5, 23).equals("to se stesso rosso")){
           vita--;
@@ -236,6 +253,7 @@ public class Client {
           pistola.setIcon(pistolaAvversario);
           pistola.setVisible(true);
           pistola.setLocation(650, 550);
+          tremolio();
           try {
             Thread.sleep(intervallo);
           } catch (InterruptedException e) {
@@ -246,6 +264,7 @@ public class Client {
           pistola.setIcon(pistolaAvversarioTe);
           pistola.setVisible(true);
           pistola.setLocation(750, 550);
+          tremolio();
           try {
             Thread.sleep(intervallo);
           } catch (InterruptedException e) {
@@ -288,6 +307,29 @@ public class Client {
     is.close(); 
     socket.close(); 
   } 
+
+  private void tremolio() {
+    new Thread() {
+      public void run() {
+        int y = pistola.getY();
+        int intervallino = 120;
+        while(pistola.getY() == y){
+          pistola.setLocation(pistola.getX()-5, pistola.getY()-5);
+          try {
+            Thread.sleep(intervallino);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          pistola.setLocation(pistola.getX()+5, pistola.getY()+5);
+          try {
+            Thread.sleep(intervallino);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+    }.start();
+  }
 
   private void aggiornaVita() {
     testoVita.setText("vita: " + vita);
