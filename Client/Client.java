@@ -373,7 +373,7 @@ public class Client {
 
   private void aggiornaVita() {
     testoVita.setText("vita: " + vita);
-    if (vita < 0) {
+    if (vita <= 0) {
       vita = 0;
       testoVita.setText("Hai perso");
       testoVita.setForeground(Color.red);
@@ -410,7 +410,7 @@ public class Client {
 
   private void aggiornaVitaAvversario() {
     testoVitaAvversario.setText("vita avversario: " + avversario);
-    if (avversario < 0) {
+    if (avversario <= 0) {
       avversario = 0;
       testoVitaAvversario.setText("Ha perso");
       testoVitaAvversario.setForeground(Color.red);
