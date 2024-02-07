@@ -250,6 +250,7 @@ public class Client {
             avversario--;
           }
           aggiornaVitaAvversario();
+          sfondo.setIcon(new ImageIcon("Client/sfondo2.png"));
           try {
             Thread.sleep(intervallo/2);
           } catch (InterruptedException e) {
@@ -291,6 +292,7 @@ public class Client {
             avversario--;
           }
           aggiornaVitaAvversario();
+          sfondo.setIcon(new ImageIcon("Client/sfondo2.png"));
           try {
             Thread.sleep(intervallo/2);
           } catch (InterruptedException e) {
@@ -371,7 +373,8 @@ public class Client {
 
   private void aggiornaVita() {
     testoVita.setText("vita: " + vita);
-    if (vita == 0) {
+    if (vita < 0) {
+      vita = 0;
       testoVita.setText("Hai perso");
       testoVita.setForeground(Color.red);
       testoVitaAvversario.setText("Ha vinto");
@@ -407,14 +410,14 @@ public class Client {
 
   private void aggiornaVitaAvversario() {
     testoVitaAvversario.setText("vita avversario: " + avversario);
-    if (avversario == 0) {
+    if (avversario < 0) {
+      avversario = 0;
       testoVitaAvversario.setText("Ha perso");
       testoVitaAvversario.setForeground(Color.red);
       testoVita.setText("Hai vinto");
       testoVita.setForeground(Color.green);
     }else{
       pistola.setLocation(pistola.getX(), pistola.getY()-1);
-      sfondo.setIcon(new ImageIcon("Client/sfondo2.png"));
     }
   }
 
