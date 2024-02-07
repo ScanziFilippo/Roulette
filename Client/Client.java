@@ -3,6 +3,10 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 
@@ -69,7 +73,6 @@ public class Client {
     }
     os = new DataOutputStream(socket.getOutputStream()); 
     is = new DataInputStream(socket.getInputStream()); 
-
     while (true) {
       String azione = is.readLine();
       System.out.println("Azione: " + azione);
@@ -229,8 +232,9 @@ public class Client {
           pistola.setVisible(true);
         }
         if (azione.substring(5, 23).equals("to se stesso rosso")){
+          playSound("pistola.wav");
           vita--;
-          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          //System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             vita--;
           }
@@ -239,8 +243,9 @@ public class Client {
         else if(azione.substring(5, 24).equals("to se stesso bianco")){
         }
         else if(azione.substring(5, 24).equals("to avversario rosso")){
+          playSound("pistola.wav");
           avversario--;
-          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          //System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             avversario--;
           }
@@ -279,8 +284,9 @@ public class Client {
           }
         }
         if (azione.substring(5, 23).equals("to se stesso rosso")) {
+          playSound("pistola.wav");
           avversario--;
-          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          //System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             avversario--;
           }
@@ -295,8 +301,9 @@ public class Client {
         else if (azione.substring(5, 24).equals("to se stesso bianco")) {
         } 
         else if (azione.substring(5, 24).equals("to avversario rosso")) {
+          playSound("pistola.wav");
           vita--;
-          System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
+          //System.out.println("/" + azione.substring(azione.length()-6, azione.length()) + "/");
           if(azione.substring(azione.length()-6, azione.length()).equals("doppio")){
             vita--;
           }
@@ -412,7 +419,7 @@ public class Client {
   }
 
   private void nuovoOggetto(){
-    if(inventario.getItemCount() != 6){
+    if(inventario.getItemCount() < 6){
       inventario.add(oggetti[(int)(Math.random()*oggetti.length)]);
       oggettiInventario[inventario.getItemCount()-1].setIcon(new ImageIcon("Client/" + inventario.getItem(inventario.getItemCount()-1) + ".png"));
       oggettiInventario[inventario.getItemCount()-1].setVisible(true);
@@ -432,6 +439,28 @@ public class Client {
     }
   }
 
+  public static synchronized void playSound(final String url) {
+    File file = new File("Client/" + url);
+    if (!file.exists()) {
+      System.out.println("'Client/" + url + "' File not found");
+      return;
+    }else{
+      System.out.println("'Client/" + url + "' File found");
+      new Thread(new Runnable() {
+        public void run() {
+          try {
+            AudioInputStream audioInput = AudioSystem.getAudioInputStream(file);  
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInput);
+            clip.start(); 
+          } catch (Exception e) {
+            System.err.println(e.getMessage());
+          }
+        }
+      }).start();    
+    }
+  }
+    
   public static void main (String[] args) throws Exception { 
     Client tcpClient = new Client(); 
     //tcpClient.grafica();
