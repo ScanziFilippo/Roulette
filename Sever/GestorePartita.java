@@ -110,6 +110,7 @@ class GestorePartita extends Thread {
             }
             else if(in1.equals("Usa quadrifoglio")){
               os.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
+              os2.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
               System.out.println("wout1: " + "Quadrifoglio " + caricatore[sparati]);
               sparati++;
             }
@@ -117,6 +118,8 @@ class GestorePartita extends Thread {
               os2.writeBytes("Usato cuore\n");
             }
             else if(in1.equals("Usa manette")){
+              os.writeBytes("Usato manette\n");
+              os2.writeBytes("Usato manette\n");
               manette = true;
             }
             else if(in1.equals("Usa teschio")){
@@ -136,6 +139,7 @@ class GestorePartita extends Thread {
               System.out.println("wout1: " + "Lente " + caricatore[sparati]);
             }
             else if(in2.equals("Usa quadrifoglio")){
+              os.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
               os2.writeBytes("Quadrifoglio " + caricatore[sparati] + "\n");
               System.out.println("wout2: " + "Quadrifoglio " + caricatore[sparati]);
               sparati++;
@@ -144,6 +148,8 @@ class GestorePartita extends Thread {
               os.writeBytes("Usato cuore\n");
             }
             else if(in2.equals("Usa manette")){
+              os.writeBytes("Usato manette\n");
+              os2.writeBytes("Usato manette\n");
               manette = true;
             }
             else if(in2.equals("Usa teschio")){

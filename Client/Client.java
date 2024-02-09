@@ -184,9 +184,15 @@ public class Client {
         else if(azione.substring(0,12).equals("Quadrifoglio")){
           if(azione.substring(13, 14).equals("1")){
             rose[0].setIcon(rosaRossa);
+            if(!turnoMio){
+              rose[0].setLocation(1100, 900);
+            }
           }
           else{
             rose[0].setIcon(rosaBianca);
+            if(!turnoMio){
+              rose[0].setLocation(1100, 900);
+            }
           }
           rose[0].setVisible(true);
           try {
@@ -195,8 +201,22 @@ public class Client {
             // TODO Auto-generated catch block
             e.printStackTrace();
           }
-          scomparsa(rose[0]);
-          //rose[0].setVisible(false);
+          //scomparsa(rose[0]);
+          rose[0].setVisible(false);
+          rose[0].setLocation(600, 925);
+        }
+        else if(azione.equals("Usato manette")){
+          oggetto.setIcon(new ImageIcon("Client/manette2.png"));
+          if(turnoMio)
+            oggetto.setLocation(850,750);
+          else
+            oggetto.setLocation(850,1000);
+          oggetto.setVisible(true);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
         }
         
         azione = is.readLine();
@@ -316,6 +336,7 @@ public class Client {
       }
       pistola.setLocation(700, 800);
       pistola.setIcon(pistolaTavolo);
+      oggetto.setVisible(false);
       if (vita == 0) {
         risultato.setText("Hai perso");
         os.writeBytes("esci\n");
@@ -337,6 +358,7 @@ public class Client {
           alpha -= 5;
           jLabel.setBackground(new Color(0, 0, 0, alpha));
           jLabel.repaint();
+          jLabel.getIcon().paintIcon(jLabel, jLabel.getGraphics(), 0, 0);
           try {
             Thread.sleep(100);
           } catch (InterruptedException e) {
