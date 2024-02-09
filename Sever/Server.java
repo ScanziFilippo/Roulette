@@ -5,14 +5,27 @@ public class Server {
     ServerSocket serverSocket = new ServerSocket(7777);
     while(true)
     {
-      System.out.println("Attesa primo giocatore");
+      Socket[] giocatori = new Socket[2];
+      while(giocatori[0] == null || giocatori[1] == null || !giocatori[0].isConnected() || !giocatori[1].isConnected()){
+        Socket socket = serverSocket.accept();
+        System.out.println("Ricezione una chiamata di apertura da:\n" + socket);
+        if(giocatori[0] == null || !giocatori[0].isConnected())
+        {
+          giocatori[0] = socket;
+        }
+        else if(giocatori[1] == null || !giocatori[1].isConnected())
+        {
+          giocatori[1] = socket;
+        }
+      }
+      /*System.out.println("Attesa primo giocatore");
       Socket socket = serverSocket.accept();
       System.out.println("Ricezione una chiamata di apertura da:\n" + socket);
       System.out.println("Attesa secondo giocatore");
       Socket socket2 = serverSocket.accept();
-      System.out.println("Ricezione una chiamata di apertura da:\n" + socket2);
+      System.out.println("Ricezione una chiamata di apertura da:\n" + socket2);*/
       System.out.println("Partita avviata");
-      GestorePartita partita = new GestorePartita(socket, socket2);
+      GestorePartita partita = new GestorePartita(giocatori[0], giocatori[1]);
       partita.start();
     }
   }

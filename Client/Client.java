@@ -11,8 +11,8 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 public class Client { 
-  public int vita = 1;
-  public int avversario = 1;
+  public int vita = 5;
+  public int avversario = 5;
   String[] oggetti = {
     "lente",
     "quadrifoglio",
@@ -55,6 +55,7 @@ public class Client {
   JButton uscita;
   JLabel[] rose = new JLabel[6];
   JLabel[] cuori = new JLabel[20];
+  JLabel[] cuoriA = new JLabel[20];
 
   public Client () throws IOException{
     grafica();
@@ -89,13 +90,13 @@ public class Client {
         else if (azione.equals("Turno tuo")) {
           turnoMio = true;
           manette = false;
-          testoTurno.setText("Turno tuo");
+          testoTurno.setText("turno tuo");
           abilitaPulsanti();
           os.writeBytes("OK\n");
         }
         else if (azione.equals("Turno non tuo")) {
           turnoMio = false;
-          testoTurno.setText("Turno non tuo");
+          testoTurno.setText("");
           disabilitaPulsanti();
           os.writeBytes("OK\n");
         }
@@ -428,6 +429,14 @@ public class Client {
       morte.setFont(new Font("Arial", Font.BOLD, 100));
       morte.setHorizontalAlignment(JLabel.CENTER);
     } else {
+      for(int i=0;i<20;i++){
+        if(i < vita){
+          cuori[i].setVisible(true);
+        }
+        else{
+          cuori[i].setVisible(false);
+        }
+      }
       morte.setVisible(true);
       /*new Thread() {
         public void run() {*/
@@ -444,7 +453,9 @@ public class Client {
             morte.setBackground(new Color(1.0f,0.0f,0.0f,alpha));
           }
           morte.setVisible(false);
-          morte.setBackground(new Color(1,0,0,1));/*
+          morte.setBackground(new Color(1,0,0,1));
+          /*
+          
         }
       }.start();*/
     }
@@ -470,6 +481,14 @@ public class Client {
       morte.setFont(new Font("Arial", Font.BOLD, 100));
       morte.setHorizontalAlignment(JLabel.CENTER);
     }else{
+      for(int i=0;i<20;i++){
+        if(i < avversario){
+          cuoriA[i].setVisible(true);
+        }
+        else{
+          cuoriA[i].setVisible(false);
+        }
+      }
       pistola.setLocation(pistola.getX(), pistola.getY()-1);
     }
   }
@@ -575,7 +594,7 @@ public class Client {
 
 
     JLabel titolo = new JLabel("roulette");
-    titolo.setLocation(100, 0);
+    titolo.setLocation(50, 0);
     titolo.setFont(new Font("Serif", Font.BOLD, 32));
     titolo.setSize(1000, 100);
     titolo.setForeground(Color.red);
@@ -591,27 +610,31 @@ public class Client {
     testoVita.setFont(new Font("Serif", Font.BOLD, 32));
     testoVita.setSize(1000, 100);
     testoVita.setForeground(Color.white);
+    testoVita.setVisible(false);
 
     testoVitaAvversario = new JLabel("vita avversario: " + this.avversario);
     testoVitaAvversario.setLocation(1500, 100);
     testoVitaAvversario.setFont(new Font("Serif", Font.BOLD, 32));
     testoVitaAvversario.setSize(1000, 100);
     testoVitaAvversario.setForeground(Color.white);
+    testoVitaAvversario.setVisible(false);
 
     testoGiocatore = new JLabel("in attesa di giocatori...");
     testoGiocatore.setLocation(1400, 0);
     testoGiocatore.setFont(new Font("Serif", Font.BOLD, 32));
     testoGiocatore.setSize(1000, 100);
     testoGiocatore.setForeground(Color.white);
+    testoGiocatore.setVisible(false);
 
     statoConnessione = new JLabel("stato connessione");
-    statoConnessione.setLocation(600, 0);
+    statoConnessione.setLocation(400, 0);
     statoConnessione.setFont(new Font("Serif", Font.BOLD, 32));
     statoConnessione.setSize(1000, 100);
     statoConnessione.setForeground(Color.red);
+    statoConnessione.setVisible(false);
 
     testoTurno = new JLabel("");
-    testoTurno.setLocation(600, 100);
+    testoTurno.setLocation(800, 0);
     testoTurno.setFont(new Font("Serif", Font.BOLD, 32));
     testoTurno.setSize(1000, 100);
     testoTurno.setForeground(Color.white);
@@ -731,7 +754,21 @@ public class Client {
       cuori[i].setSize(96, 96);
       cuori[i].setLocation(50+i*100, 100);
       frame.add(cuori[i]);
-      cuori[i].setVisible(false);
+      if(i < vita)
+        cuori[i].setVisible(true);
+      else
+        cuori[i].setVisible(false);
+    }
+
+    for(int i=0;i<20;i++){
+      cuoriA[i] = new JLabel(new ImageIcon("Client/cuore2.png"));
+      cuoriA[i].setSize(96, 96);
+      cuoriA[i].setLocation(1770-i*100, 100);
+      frame.add(cuoriA[i]);
+      if(i < avversario)
+        cuoriA[i].setVisible(true);
+      else
+        cuoriA[i].setVisible(false);
     }
 
     frame.add(comunicazione);
