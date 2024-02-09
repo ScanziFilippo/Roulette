@@ -11,8 +11,8 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 public class Client { 
-  public int vita = 5;
-  public int avversario = 5;
+  public int vita = 1;
+  public int avversario = 1;
   String[] oggetti = {
     "lente",
     "quadrifoglio",
@@ -54,6 +54,7 @@ public class Client {
   JButton button2;
   JButton uscita;
   JLabel[] rose = new JLabel[6];
+  JLabel[] cuori = new JLabel[20];
 
   public Client () throws IOException{
     grafica();
@@ -76,7 +77,7 @@ public class Client {
     while (true) {
       String azione = is.readLine();
       System.out.println("Azione: " + azione);
-      while (!azione.substring(0, 5).equals("Spara") && !azione.equals("esci")) {
+      while (!azione.equals("esci") && !azione.substring(0, 5).equals("Spara")) {
         if (azione.equals("Sei il primo")) {
           testoGiocatore.setText("Sei il primo");
           os.writeBytes("OK\n");
@@ -416,10 +417,15 @@ public class Client {
       testoVitaAvversario.setText("Ha vinto");
       testoVitaAvversario.setForeground(Color.green);
       morte.setVisible(true);
+      morte.setBackground(Color.red);
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
       morte.setText("Hai perso");
       morte.setForeground(Color.white);
       morte.setFont(new Font("Arial", Font.BOLD, 100));
-      //centra
       morte.setHorizontalAlignment(JLabel.CENTER);
     } else {
       morte.setVisible(true);
@@ -452,6 +458,17 @@ public class Client {
       testoVitaAvversario.setForeground(Color.red);
       testoVita.setText("Hai vinto");
       testoVita.setForeground(Color.green);
+      morte.setVisible(true);
+      morte.setBackground(Color.green);
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      morte.setText("Hai vinto");
+      morte.setForeground(Color.white);
+      morte.setFont(new Font("Arial", Font.BOLD, 100));
+      morte.setHorizontalAlignment(JLabel.CENTER);
     }else{
       pistola.setLocation(pistola.getX(), pistola.getY()-1);
     }
@@ -559,43 +576,43 @@ public class Client {
 
     JLabel titolo = new JLabel("roulette");
     titolo.setLocation(100, 0);
-    titolo.setFont(new Font("Serif", Font.BOLD, 28));
+    titolo.setFont(new Font("Serif", Font.BOLD, 32));
     titolo.setSize(1000, 100);
     titolo.setForeground(Color.red);
 
     risultato = new JLabel("");
     risultato.setLocation(500, 500);
-    risultato.setFont(new Font("Serif", Font.BOLD, 28));
+    risultato.setFont(new Font("Serif", Font.BOLD, 32));
     risultato.setSize(1000, 100);
     risultato.setForeground(Color.white);
 
     testoVita = new JLabel("vita: " + this.vita);
     testoVita.setLocation(100, 100);
-    testoVita.setFont(new Font("Serif", Font.BOLD, 28));
+    testoVita.setFont(new Font("Serif", Font.BOLD, 32));
     testoVita.setSize(1000, 100);
     testoVita.setForeground(Color.white);
 
     testoVitaAvversario = new JLabel("vita avversario: " + this.avversario);
     testoVitaAvversario.setLocation(1500, 100);
-    testoVitaAvversario.setFont(new Font("Serif", Font.BOLD, 28));
+    testoVitaAvversario.setFont(new Font("Serif", Font.BOLD, 32));
     testoVitaAvversario.setSize(1000, 100);
     testoVitaAvversario.setForeground(Color.white);
 
-    testoGiocatore = new JLabel("Giocatore ?");
+    testoGiocatore = new JLabel("in attesa di giocatori...");
     testoGiocatore.setLocation(1400, 0);
-    testoGiocatore.setFont(new Font("Serif", Font.BOLD, 28));
+    testoGiocatore.setFont(new Font("Serif", Font.BOLD, 32));
     testoGiocatore.setSize(1000, 100);
     testoGiocatore.setForeground(Color.white);
 
     statoConnessione = new JLabel("stato connessione");
     statoConnessione.setLocation(600, 0);
-    statoConnessione.setFont(new Font("Serif", Font.BOLD, 28));
+    statoConnessione.setFont(new Font("Serif", Font.BOLD, 32));
     statoConnessione.setSize(1000, 100);
     statoConnessione.setForeground(Color.red);
 
     testoTurno = new JLabel("");
     testoTurno.setLocation(600, 100);
-    testoTurno.setFont(new Font("Serif", Font.BOLD, 28));
+    testoTurno.setFont(new Font("Serif", Font.BOLD, 32));
     testoTurno.setSize(1000, 100);
     testoTurno.setForeground(Color.white);
 
@@ -707,6 +724,14 @@ public class Client {
       rose[i].setLocation(600+i*100, 925);
       frame.add(rose[i]);
       rose[i].setVisible(false);
+    }
+
+    for(int i=0;i<20;i++){
+      cuori[i] = new JLabel(new ImageIcon("Client/cuore2.png"));
+      cuori[i].setSize(96, 96);
+      cuori[i].setLocation(50+i*100, 100);
+      frame.add(cuori[i]);
+      cuori[i].setVisible(false);
     }
 
     frame.add(comunicazione);
