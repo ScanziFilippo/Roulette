@@ -123,6 +123,8 @@ class GestorePartita extends Thread {
               manette = true;
             }
             else if(in1.equals("Usa teschio")){
+              os.writeBytes("Usato teschio\n");
+              os2.writeBytes("Usato teschio\n");
               teschio = true;
             }
             if(sparati == 6){
@@ -153,6 +155,8 @@ class GestorePartita extends Thread {
               manette = true;
             }
             else if(in2.equals("Usa teschio")){
+              os.writeBytes("Usato teschio\n");
+              os2.writeBytes("Usato teschio\n");
               teschio = true;
             }
             if(sparati == 6){

@@ -218,7 +218,20 @@ public class Client {
             e.printStackTrace();
           }
         }
-        
+        else if(azione.equals("Usato teschio")){
+          oggetto.setSize(300, 96);
+          oggetto.setIcon(new ImageIcon("Client/barra.png"));
+          oggetto.setLocation(780,470);
+          oggetto.setVisible(true);
+          try {
+            Thread.sleep(intervallo);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          /*oggetto.setSize(96, 96);
+          oggetto.setVisible(false);*/
+        }
+
         azione = is.readLine();
       }
       comunicazione.setText("");
@@ -336,6 +349,7 @@ public class Client {
       }
       pistola.setLocation(700, 800);
       pistola.setIcon(pistolaTavolo);
+      oggetto.setSize(96, 96);
       oggetto.setVisible(false);
       if (vita == 0) {
         risultato.setText("Hai perso");
